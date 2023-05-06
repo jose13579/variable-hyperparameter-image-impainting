@@ -1,9 +1,10 @@
 {
-    "seed": 2020,
-    "save_dir": "trained_models/psv/psv_proposal_inpainting_proposal_seed_0/",
+    "seed": 2023,
+    "save_dir": "trained_models/places/places_proposal_inpainting_proposal_seed_0/",
+    "model": "VHII_efficient",
     "data_loader": {
-        "name": "psv",
-        "data_root": "/data/psv/paris_train/paris_train_original/",
+        "name": "places",
+        "data_root": "/data/places365/data_256",
         "w": 256,
         "h": 256
     },
@@ -13,8 +14,7 @@
         "adversarial_weight": 0.01,
         "GAN_LOSS": "lsgan",
         "style_weight":360,
-        "perceptual_weight":0.9,
-        "tv_weight":0.1
+        "perceptual_weight":0.9
     },
     "trainer": {
         "type": "Adam",

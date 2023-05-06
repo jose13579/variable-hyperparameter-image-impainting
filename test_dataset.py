@@ -40,9 +40,9 @@ parser.add_argument("--output_path_inpainted",   type=str, default="results_inpa
 parser.add_argument("--output_path_incompleted",   type=str, default="results_incompleted")
 parser.add_argument("--output_path_groundtruth",   type=str, default="results_groundtruth")
 parser.add_argument("--output_path_full_inpainted",   type=str, default="results_full_inpainted")
-parser.add_argument("--print_samples",  type=int, default=0)
+parser.add_argument("--print_samples", action='store_true')
 parser.add_argument("--set_seed",  type=int, default=0)
-parser.add_argument("--model",   type=str, default='VHII')
+parser.add_argument("--model",   type=str, default='VHII_efficient')
 
 args = parser.parse_args()
 

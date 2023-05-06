@@ -65,7 +65,7 @@ class InpaintGenerator(BaseNetwork):
     def __init__(self, init_weights=True):
         super(InpaintGenerator, self).__init__()
         embed_hidden=[256, 256, 256, 256]
-        embed_dims = [256, 256, 256, 256] 
+        embed_dims = [256, 128, 64, 32] 
         num_heads=[8, 4, 2, 1]
         depths=[2, 2, 2, 2]
         sr_ratios=[1, 1, 1, 1]
@@ -74,16 +74,16 @@ class InpaintGenerator(BaseNetwork):
         blocks = []
 
         for _ in range(depths[0]):
-            blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[0], embed_dims=embed_dims[0], num_heads=num_heads[0], sr_ratio=sr_ratios[0], reduce_channels=False))
+            blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[0], embed_dims=embed_dims[0], num_heads=num_heads[0], sr_ratio=sr_ratios[0]))
 
         for _ in range(depths[1]):
-            blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[1], embed_dims=embed_dims[1], num_heads=num_heads[1], sr_ratio=sr_ratios[1], reduce_channels=False))
+            blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[1], embed_dims=embed_dims[1], num_heads=num_heads[1], sr_ratio=sr_ratios[1]))
 
         for _ in range(depths[2]):
-            blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[2], embed_dims=embed_dims[2], num_heads=num_heads[2], sr_ratio=sr_ratios[2], reduce_channels=False))
+            blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[2], embed_dims=embed_dims[2], num_heads=num_heads[2], sr_ratio=sr_ratios[2]))
 
         for _ in range(depths[3]):
-            blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[3], embed_dims=embed_dims[3], num_heads=num_heads[3], sr_ratio=sr_ratios[3], reduce_channels=False))
+            blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[3], embed_dims=embed_dims[3], num_heads=num_heads[3], sr_ratio=sr_ratios[3]))
 
 
         self.transformer = nn.Sequential(*blocks)
@@ -287,6 +287,7 @@ class MultiHeadedAttention(nn.Module):
 class FeedForward(nn.Module):
     def __init__(self, d_model):
         super(FeedForward, self).__init__()
+        # We set d_ff as a default to 2048
         self.conv = nn.Sequential(
             nn.Conv2d(d_model, d_model, kernel_size=3, padding=2, dilation=2, padding_mode='reflect'),
             nn.LeakyReLU(0.2, inplace=True),
@@ -319,7 +320,7 @@ class DepthWiseTransformerBlock(nn.Module):
     """
     MobileVitTransformer = Depthwise separable conv + Transformer + Depthwise separable conv
     """
-    def __init__(self, patchsize, hidden=128, embed_dims=128, num_heads=4, sr_ratio=1, kernel_size=3, reduce_channels=True):
+    def __init__(self, patchsize, hidden=128, embed_dims=128, num_heads=4, sr_ratio=1, kernel_size=3):
         super().__init__()
         self.hidden = hidden
         self.embed_dims = embed_dims
@@ -335,7 +336,7 @@ class DepthWiseTransformerBlock(nn.Module):
         x, m = x['x'], x['m']
 
         # Local representations
-        if reduce_channels:
+        if self.hidden != self.embed_dims:
            x = self.conv1(x)
            x = self.conv2(x)
         
@@ -343,7 +344,7 @@ class DepthWiseTransformerBlock(nn.Module):
         x = self.transformer({'x': x, 'm': m})['x']
 
         # Fusion
-        if reduce_channels:
+        if self.hidden != self.embed_dims:
            x = self.conv3(x)
            x = self.conv4(x)
         return {'x': x, 'm': m}

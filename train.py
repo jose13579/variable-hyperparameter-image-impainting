@@ -17,7 +17,7 @@ from core.dist import (
 )
 parser = argparse.ArgumentParser(description='VHII')
 parser.add_argument('--config', default='configs/places_proposal.json', type=str)
-parser.add_argument('--model', default='VHII', type=str)
+parser.add_argument('--model', default='VHII_efficient', type=str)
 args = parser.parse_args()
 
 

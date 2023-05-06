@@ -1,10 +1,10 @@
 export CUDA_VISIBLE_DEVICES=0
-input_path=examples/imgs/rgb/img_6.png
-mask_path=examples/imgs/mask/img_6.png
-output_path==examples/output
+input_path=$1 #examples/imgs/rgb/img_6.png
+mask_path=$2 #examples/imgs/mask/img_6.png
+output_path=$3 #examples/output
 mkdir $output_path
 
-model_path=trained_models/trained_model_lsgan_perceptual_style_continuous_proposed/sttn_new_path_sizes_places_lsgan_continuous_proposed/gen_00050.pth
+model_path=$4 #trained_models/celeba/celeba_proposal_inpainting_proposal_seed_0/gen_00050.pth
 
 model="VHII"
 

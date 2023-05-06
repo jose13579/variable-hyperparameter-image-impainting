@@ -1,9 +1,10 @@
 {
-    "seed": 2020,
-    "save_dir": "trained_models/trained_places_model_lsgan_proposed/",
+    "seed": 2023,
+    "save_dir": "trained_models/celeba/celeba_proposal_inpainting_proposal_seed_42/",
+    "model": "VHII_efficient",
     "data_loader": {
-        "name": "places",
-        "data_root": "/data/places365/data_256/",
+        "name": "celeba",
+        "data_root": "/data/celeba/celeba_dataset/train",
         "w": 256,
         "h": 256
     },
@@ -11,10 +12,9 @@
         "hole_weight": 1,
         "valid_weight": 1,
         "adversarial_weight": 0.01,
-        "GAN_LOSS": "lsgan",
+        "GAN_LOSS": "nsgan",
         "style_weight":360,
-        "perceptual_weight":0.9,
-        "tv_weight":0.1
+        "perceptual_weight":0.9
     },
     "trainer": {
         "type": "Adam",

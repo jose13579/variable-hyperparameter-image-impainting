@@ -24,9 +24,9 @@ def get_images_names(train_data_path, dataset_name):
        fnames = glob.glob(train_data_path + '/*/*/*.jpg')
        fnames = fnames + glob.glob(train_data_path + '/*/*/*/*.jpg')
     elif dataset_name == "celeba":
-       fnames = glob.glob(train_data_path + '/train/*.jpg')
+       fnames = glob.glob(train_data_path + '/*.jpg')
     elif dataset_name == "psv":
-       fnames = glob.glob(train_data_path + '*.JPG')
+       fnames = glob.glob(train_data_path + '/*.JPG')
     else:
        fnames = []
 
