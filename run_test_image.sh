@@ -10,4 +10,4 @@ output_name=$6 #"100_000100_output"
 
 mkdir $output_path
 
-python test.py --model $model --ckpt $load_model_dir  --image $img_path --mask $mask_path --output_path $output_path --output_name $output_name
+python test_image.py --model_name $model_name --ckpt $load_model_dir  --img_path $img_path --mask_path $mask_path --output_path $output_path --output_name $output_name
