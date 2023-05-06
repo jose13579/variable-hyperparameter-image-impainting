@@ -34,7 +34,7 @@ parser.add_argument("--width",   type=int, default=256)
 parser.add_argument("--height",   type=int, default=256)
 parser.add_argument("--output_name",   type=str, default="test_0")
 parser.add_argument("--output_path",   type=str, default="results")
-parser.add_argument("--model",   type=str, default='VHII')
+parser.add_argument("--model",   type=str, default='VHII_efficient')
 
 args = parser.parse_args()
 

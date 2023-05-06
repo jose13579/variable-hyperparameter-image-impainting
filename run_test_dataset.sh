@@ -12,8 +12,6 @@ mask_dataset=$5 #/data/pconv/test_mask/20-30/
 
 output_path_Samples=$6 #test_trained_models/trained_celeba_VHII_efficient_seed_0
 
-#print_samples
-
 mkdir $output_path_Samples
 
 output_path_masks_samples=$output_path_Samples/output_path_masks
