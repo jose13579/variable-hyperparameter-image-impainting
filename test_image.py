@@ -27,14 +27,14 @@ from torch.autograd import Variable
 
 
 parser = argparse.ArgumentParser(description="VHII")
-parser.add_argument("--image", type=str, required=True)
-parser.add_argument("--mask",   type=str, required=True)
+parser.add_argument("--img_path", type=str, required=True)
+parser.add_argument("--mask_path",   type=str, required=True)
 parser.add_argument("--ckpt",   type=str, required=True)
 parser.add_argument("--width",   type=int, default=256)
 parser.add_argument("--height",   type=int, default=256)
 parser.add_argument("--output_name",   type=str, default="test_0")
 parser.add_argument("--output_path",   type=str, default="results")
-parser.add_argument("--model",   type=str, default='VHII_efficient')
+parser.add_argument("--model_name",   type=str, default='VHII_efficient')
 
 args = parser.parse_args()
 
@@ -58,7 +58,7 @@ def read_mask(mpath):
 def main_worker():
     # set up models
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    net = importlib.import_module('model.' + args.model)
+    net = importlib.import_module('model.' + args.model_name)
     model = net.InpaintGenerator().to(device)
     model_path = args.ckpt
     data = torch.load(args.ckpt, map_location=device)
@@ -67,17 +67,17 @@ def main_worker():
     print('loading from: {}'.format(args.ckpt))
     model.eval()
     
-    base=os.path.basename(args.mask)
+    base=os.path.basename(args.mask_path)
     base=os.path.splitext(base)[0]
 
     # prepare dataset, encode all frames into deep space 
-    frames = Image.open(args.image).convert('RGB')
+    frames = Image.open(args.img_path).convert('RGB')
     frames = frames.resize((w, h))
 
     feats = _to_tensors(frames).unsqueeze(0)*2-1
     frames = np.array(frames).astype(np.uint8)
 
-    masks = read_mask(args.mask)
+    masks = read_mask(args.mask_path)
     binary_masks = np.expand_dims((np.array(masks) != 0).astype(np.uint8), 2)
     
     cv2.imwrite(f"{output_path}/{base}_mask_{args.output_name}.png",binary_masks*255)
@@ -92,7 +92,7 @@ def main_worker():
          pred_img = (current_img+1)/2
          pred_img = pred_img.cpu().permute(0,2,3,1).numpy()*255    
 
-    print('loading image and mask from: {} and {}'.format(args.image,args.mask))
+    print('loading image and mask from: {} and {}'.format(args.img_path,args.mask_path))
         
     inpainted_img = np.array(pred_img[0]).astype(np.uint8)
     inpainted_img = inpainted_img*(binary_masks)+frames*(1-binary_masks)
