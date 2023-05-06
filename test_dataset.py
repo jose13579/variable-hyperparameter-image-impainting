@@ -56,19 +56,19 @@ set_seed = args.set_seed
 number_samples = 5
 
 if os.path.isdir(output_path_masks) == False:
-   if print_samples == 1:
+   if print_samples:
       os.mkdir(output_path_masks)
 		
 if os.path.isdir(output_path_inpainted) == False:
-   if print_samples == 1:
+   if print_samples:
       os.mkdir(output_path_inpainted)
       
 if os.path.isdir(output_path_incompleted) == False:
-   if print_samples == 1:
+   if print_samples:
       os.mkdir(output_path_incompleted)
       
 if os.path.isdir(output_path_groundtruth) == False:
-   if print_samples == 1:
+   if print_samples:
       os.mkdir(output_path_groundtruth)
       
 if os.path.isdir(output_path_full_inpainted) == False:
@@ -151,7 +151,7 @@ def main_worker():
       endTime = (time.time() - startTime)
       totalTime += endTime
 
-      if print_samples == 1:
+      if print_samples:
          if (i % (total_number // number_samples)) == 0:
             cv2.imwrite(f"{output_path_masks}/{base}.png",binary_masks*255)
             cv2.imwrite(f"{output_path_groundtruth}/{base}.png",frames[...,::-1])
