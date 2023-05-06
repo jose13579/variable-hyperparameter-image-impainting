@@ -302,6 +302,7 @@ class TransformerBlock(nn.Module):
     """
     Transformer = MultiHead_Attention + Feed_Forward with sublayer connection
     """
+    
     def __init__(self, patchsize, embed_dims=128, num_heads=4, sr_ratio=1):
         super().__init__()
         

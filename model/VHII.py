@@ -124,8 +124,7 @@ class InpaintGenerator(BaseNetwork):
         masks = F.interpolate(masks, scale_factor=1.0/4)
  
         enc_feat = self.add_pos_emb(enc_feat)
-        enc_feat = self.transformer(
-            {'x': enc_feat, 'm': masks, 'b': b, 'c': c})['x']
+        enc_feat = self.transformer(({'x': enc_feat, 'm': masks})['x']
 
         output = self.decoder(enc_feat)
         output = torch.tanh(output)
@@ -196,6 +195,8 @@ class MultiHeadedAttention(nn.Module):
     def __init__(self, patchsize, embed_dims, num_heads, sr_ratio):
         super().__init__()
         self.patchsize = [patchsize[int(np.log2(num_heads))]]*num_heads
+        self.embed_dims = embed_dims
+        self.num_heads = num_heads
         self.query_embedding = nn.Conv2d(
             embed_dims, embed_dims, kernel_size=1, padding=0)
         self.value_embedding = nn.Conv2d(
@@ -211,9 +212,9 @@ class MultiHeadedAttention(nn.Module):
         if sr_ratio > 1:
             self.sr = nn.Conv2d(embed_dims, embed_dims, kernel_size=sr_ratio, stride=sr_ratio)
 
-    def forward(self, x, m, b, c):
-        _, _, h, w = x.size()
-        d_k = c // len(self.patchsize)
+    def forward(self, x, m):
+        b, _, h, w = x.size()
+        d_k = self.embed_dims // self.num_heads
         output = []
 
         _query = self.query_embedding(x)
@@ -233,20 +234,18 @@ class MultiHeadedAttention(nn.Module):
                
             out_w, out_h = w // width, h // height
             mm = m.view(b, 1, out_h, height, out_w, width)
-            mm = mm.permute(0, 2, 4, 1, 3, 5).contiguous().view(
-                b,  out_h*out_w, height*width)
+            mm = mm.permute(0, 2, 4, 1, 3, 5).contiguous().view(b,  out_h*out_w, height*width)
             mm = (mm.mean(-1) > 0.5).unsqueeze(1).repeat(1, out_h*out_w, 1)
 
             # 1) embedding and reshape
             query = query.view(b, d_k, out_h, height, out_w, width)
-            query = query.permute(0, 2, 4, 1, 3, 5).contiguous().view(
-                b,  out_h*out_w, d_k*height*width)
+            query = query.permute(0, 2, 4, 1, 3, 5).contiguous().view(b,  out_h*out_w, d_k*height*width)
+            
             key = key.view(b, d_k, out_h, height, out_w, width)
-            key = key.permute(0, 2, 4, 1, 3, 5).contiguous().view(
-                b,  out_h*out_w, d_k*height*width)
+            key = key.permute(0, 2, 4, 1, 3, 5).contiguous().view(b,  out_h*out_w, d_k*height*width)
+            
             value = value.view(b, d_k, out_h, height, out_w, width)
-            value = value.permute(0, 2, 4, 1, 3, 5).contiguous().view(
-                b,  out_h*out_w, d_k*height*width)
+            value = value.permute(0, 2, 4, 1, 3, 5).contiguous().view(b,  out_h*out_w, d_k*height*width)
 
             y, _ = self.attention(query, key, value, mm)
 
@@ -287,10 +286,10 @@ class TransformerBlock(nn.Module):
         self.feed_forward = FeedForward(embed_dims)
 
     def forward(self, x):
-        x, m, b, c = x['x'], x['m'], x['b'], x['c']
-        x = x + self.attention(x, m, b, c)
+        x, m = x['x'], x['m']
+        x = x + self.attention(x, m)
         x = x + self.feed_forward(x)
-        return {'x': x, 'm': m, 'b': b, 'c': c}
+        return {'x': x, 'm': m}
 
 
 # ######################################################################
