@@ -25,7 +25,7 @@ ENV PATH /opt/conda/bin:$PATH
 ENV LD_LIBRARY_PATH /usr/local/cuda-10.0/lib64:/usr/local/cuda-10.0/extras/CUPTI/lib64:$LD_LIBRARY_PATH
 Run apt-get update
 
-RUN mkdir /workspace/ && cd /workspace/ && git clone https://github.com/jose13579/variable-hyperparameter-image-impainting.git && cd STTN/ && conda env create -f environment.yml
+RUN mkdir /workspace/ && cd /workspace/ && git clone https://github.com/jose13579/variable-hyperparameter-image-impainting.git && cd variable-hyperparameter-image-impainting/ && conda env create -f environment.yml
 RUN apt-get install ffmpeg libsm6 libxext6  -y
 
 RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
