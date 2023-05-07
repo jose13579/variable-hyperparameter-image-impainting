@@ -33,7 +33,7 @@ class Trainer():
         self.iteration = 0
 
         # setup data set and data loader
-        self.train_dataset = Dataset(config['data_loader'], split='train', config['data_loader']['name'])
+        self.train_dataset = Dataset(config['data_loader'], split='train', dataset_name=config['data_loader']['name'])
         self.train_sampler = None
         self.train_args = config['trainer']
         if config['distributed']:
