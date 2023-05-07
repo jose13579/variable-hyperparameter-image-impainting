@@ -31,7 +31,6 @@ RUN apt-get install ffmpeg libsm6 libxext6  -y
 RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo "conda activate vhii" >> ~/.bashrc
 
-RUN pip install tensorboardX
 RUN apt-get install libxrender1
 
 WORKDIR /workspace

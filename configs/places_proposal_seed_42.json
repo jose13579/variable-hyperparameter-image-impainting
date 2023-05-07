@@ -1,7 +1,7 @@
 {
     "seed": 2023,
     "save_dir": "trained_models/places/places_proposal_inpainting_proposal_seed_42/",
-    "model": "VHII_efficient",
+    "model": "VHII",
     "data_loader": {
         "name": "places",
         "data_root": "/data/places365/data_256",
