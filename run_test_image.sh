@@ -1,7 +1,7 @@
 export CUDA_VISIBLE_DEVICES=0
 
 model_name=$1 #VHII_efficient
-load_model_dir=$2 #trained_models/celeba/celeba_VHII_efficient_seed_0/gen_00050.pth
+load_model_dir=$2 #trained_models/celeba/celeba_VHII_efficient/gen_00050.pth
 
 img_path=$3 #examples/img/100_000100_gt.png
 mask_path=$4 #examples/mask/100_000100_mask.png

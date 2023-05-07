@@ -2,7 +2,7 @@ export CUDA_VISIBLE_DEVICES=0
 
 model_name=$1 # VHII_efficient
 
-load_model_dir=$2 #trained_models/celeba/celeba_VHII_efficient_seed_0/gen_00050.pth
+load_model_dir=$2 #trained_models/celeba/celeba_VHII_efficient/gen_00050.pth
 
 set_seed=$3 #0, 42 and 123
 

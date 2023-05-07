@@ -322,23 +322,25 @@ class DepthWiseTransformerBlock(nn.Module):
         self.conv3 = conv_1x1_bn(embed_dims, hidden)
         self.conv4 = conv_nxn_bn(hidden, hidden, kernel_size)
     
-    def forward(self, x):
-        x, m = x['x'], x['m']
-
-        # Local representations
+    def forward(self, input):
         if reduce_channels:
+           x, m = input['x'], input['m']
+
+           # Local representations
            x = self.conv1(x)
            x = self.conv2(x)
         
-        # Global representations
-        x = self.transformer({'x': x, 'm': m})['x']
+           # Global representations
+           x = self.transformer({'x': x, 'm': m})['x']
 
-        # Fusion
-        if reduce_channels:
+           # Fusion
            x = self.conv3(x)
            x = self.conv4(x)
-        return {'x': x, 'm': m}
-
+           return {'x': x, 'm': m}
+        else:
+           # Global representations
+           input = self.transformer(input)
+        return input
 
 # ######################################################################
 # ######################################################################
