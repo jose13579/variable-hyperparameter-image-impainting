@@ -124,7 +124,7 @@ class InpaintGenerator(BaseNetwork):
         masks = F.interpolate(masks, scale_factor=1.0/4)
  
         enc_feat = self.add_pos_emb(enc_feat)
-        enc_feat = self.transformer(({'x': enc_feat, 'm': masks})['x']
+        enc_feat = self.transformer({'x': enc_feat, 'm': masks})['x']
 
         output = self.decoder(enc_feat)
         output = torch.tanh(output)
