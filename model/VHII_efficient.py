@@ -130,17 +130,7 @@ class InpaintGenerator(BaseNetwork):
         output = self.decoder(enc_feat)
         output = torch.tanh(output)
         return output
-
-    def infer(self, feat, masks):
-        b, c, h, w = masks.size()
-        masks = masks.view(b, c, h, w)
-        masks = F.interpolate(masks, scale_factor=1.0/4)
-        _, c, _, _ = feat.size()
-
-        enc_feat = self.transformer1(
-            {'x': enc_feat, 'm': masks, 'b': b, 'c': c})['x']
-
-        return enc_feat
+        
 
 class pixelup(nn.Module):
     def __init__(self, input_channel, output_channel, kernel_size=3, padding=0):
