@@ -30,7 +30,6 @@ RUN apt-get install ffmpeg libsm6 libxext6  -y
 
 RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo "conda activate vhii" >> ~/.bashrc
-RUN echo "conda install pytorch==1.2.0 torchvision==0.4.0 cudatoolkit=10.0 -c pytorch -y" >> ~/.bashrc
 
 RUN pip install tensorboardX
 RUN apt-get install libxrender1
