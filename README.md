@@ -228,7 +228,7 @@ bash run_test_image.sh "VHII" trained_models/celeba/celeba_VHII/gen_00050.pth "e
 ```BibTeX
 @article{Campana2023_Inpainting,
   author = (J.L.F. Campana and L.G.L. Decker and M.R. Souza and H.A. Maia and H. Pedrini}
-  title = {{Variable-Hyperparameter Visual Transformer for Efficient Image Inpainting}},
+  title = {Variable-Hyperparameter Visual Transformer for Efficient Image Inpainting},
   journal = {Computers \& Graphics},
   year = {2023}
 }
