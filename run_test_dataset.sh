@@ -1,8 +1,8 @@
 export CUDA_VISIBLE_DEVICES=0
 
-model_name=$1 # VHII_efficient
+model_name=$1 # VHII
 
-load_model_dir=$2 #trained_models/celeba/celeba_VHII_efficient/gen_00050.pth
+load_model_dir=$2 #trained_models/celeba/celeba_VHII/gen_00050.pth
 
 set_seed=$3 #0, 42 and 123
 
@@ -10,7 +10,7 @@ images_dataset=$4 #/data/celeba/celeba_dataset/test/
 
 mask_dataset=$5 #/data/pconv/test_mask/20-30/
 
-output_path_Samples=$6 #test_trained_models/trained_celeba_VHII_efficient_seed_0
+output_path_Samples=$6 #test_trained_models/trained_celeba_VHII_seed_0
 
 mkdir $output_path_Samples
 
