@@ -222,5 +222,19 @@ bash run_test_image.sh "VHII" trained_models/celeba/celeba_VHII/gen_00050.pth "e
 <p><img src="./images/damaged/000600.png" width="48%" alt="face3"> &nbsp;&nbsp;&nbsp;&nbsp; <img src="./images/inpainted/000600.png" width="48%" alt="Celeba dataset - example 1"></p>
 
 <!-- ---------------------------------------------- -->
+
+## Citing VHII
+
+```BibTeX
+@article{Campana2023_Inpainting,
+  author = (J.L.F. Campana and L.G.L. Decker and M.R. Souza and H.A. Maia and H. Pedrini}
+  title = {{Variable-Hyperparameter Visual Transformer for Efficient Image Inpainting}},
+  journal = {Computers \& Graphics},
+  year = {2023}
+}
+```
+
+<!-- ---------------------------------------------- -->
+
 ## Contact
 If you have any questions or suggestions about this paper, feel free to contact me (j209820@dac.unicamp.br).
