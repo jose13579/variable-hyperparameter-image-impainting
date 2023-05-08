@@ -191,14 +191,29 @@ To test the models
 2. Run the test bash file to evaluate/test the trained model. 
 
 ```
-bash run_test_dataset.sh --model_name --model_path --seed --real_dataset_path --mask_dataset_path --output_dataset_path 
+bash run_test_dataset.sh --model_name --model_path --seed --gt_dataset_path --mask_dataset_path --output_dataset_path 
 ```
 
 For example:
 ```
-bash run_test_dataset.sh "VHII" "trained_models/celeba/celeba_VHII/gen_00050.pth" 0 "/data/celeba/celeba_dataset/test/" "/data/pconv/test_mask/20-30/" "test_output_datasets/trained_celeba_VHII_efficient_seed_0"
+bash run_test_dataset.sh "VHII" "trained_models/celeba/celeba_VHII/gen_00050.pth" 0 "/data/celeba/celeba_dataset/test/" "/data/pconv/test_mask/20-30/" "test_output_datasets/trained_celeba_VHII_seed_0"
 ```
 The outputs inpainted images are saved at ```test_output_datasets/```.  
+
+<!-- ---------------------------------------------- -->
+
+## Metrics
+
+To measure the quantitative results:
+```
+bash run_metrics.sh --gt_dataset_path --output_dataset_path
+```
+
+For example:
+
+```
+bash run_metrics.sh "/data/celeba/celeba_dataset/test/" "/config/variable-hyperparameter-image-impainting/test_output_datasets/trained_celeba_VHII_seed_0"
+```
 
 <!-- ---------------------------------------------- -->
 
@@ -216,6 +231,7 @@ bash run_test_image.sh "VHII" trained_models/celeba/celeba_VHII/gen_00050.pth "e
 ```
 
 <!-- ---------------------------------------------- -->
+
 ## Visualization
 <p><img src="./images/damaged/000100.png" width="48%" alt="face1"> &nbsp;&nbsp;&nbsp;&nbsp; <img src="./images/inpainted/000100.png" width="48%" alt="Celeba dataset - example 1"></p>
 
@@ -227,10 +243,10 @@ bash run_test_image.sh "VHII" trained_models/celeba/celeba_VHII/gen_00050.pth "e
 
 ```BibTeX
 @article{Campana2023_Inpainting,
-  author = (J.L.F. Campana and L.G.L. Decker and M.R. Souza and H.A. Maia and H. Pedrini}
-  title = {Variable-Hyperparameter Visual Transformer for Efficient Image Inpainting},
-  journal = {Computers \& Graphics},
-  year = {2023}
+  author=(J.L.F. Campana and L.G.L. Decker and M.R. Souza and H.A. Maia and H. Pedrini}
+  title={Variable-Hyperparameter Visual Transformer for Efficient Image Inpainting},
+  journal={Computers \& Graphics},
+  year={2023}
 }
 ```
 

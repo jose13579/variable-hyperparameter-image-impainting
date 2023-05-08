@@ -8,7 +8,7 @@ set_seed=$3 #0, 42 and 123
 
 images_dataset=$4 #/data/celeba/celeba_dataset/test/
 
-mask_dataset=$5 #/data/pconv/test_mask/20-30/
+mask_dataset=$5 #/data/test_mask/mask/testing_mask_dataset/20-30/
 
 output_path_Samples=$6 #test_trained_models/trained_celeba_VHII_seed_0
 
