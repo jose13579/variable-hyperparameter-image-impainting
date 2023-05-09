@@ -56,7 +56,6 @@ def _psnr(paths):
                img2 = Image.open(os.path.join(path2, base+".jpg")).convert("RGB")
 
             psnr_value = peak_signal_noise_ratio(cv2.resize(np.array(img1),SIZE), cv2.resize(np.array(img2), SIZE))
-            print(base+" PSNR",psnr_value)
             psnr_total = psnr_total + psnr_value
             num = num + 1
 
@@ -83,7 +82,6 @@ def _ssim(paths):
                 img2 = Image.open(os.path.join(path2, base+".jpg")).convert("RGB")
 
             ssim_value = structural_similarity(cv2.resize(np.array(img1),SIZE), cv2.resize(np.array(img2), SIZE),multichannel=True)
-            print(base+" SSIM",ssim_value)
             ssim_total = ssim_total + ssim_value
             num = num + 1
 
@@ -110,7 +108,6 @@ def _meanl1(paths):
                img2 = Image.open(os.path.join(path2, base+".jpg")).convert("RGB")
 
             l1_error = np.mean(np.abs(cv2.resize(np.array(img1),SIZE)-cv2.resize(np.array(img2), SIZE)))
-            print(base+" MeanL1",l1_error)
             total_error = total_error + l1_error
             num = num + 1
 
@@ -146,7 +143,6 @@ def _lpips(paths):
 	    # Compute distance
             dist = loss_fn.forward(img1,img2).item()
             lips_value = lips_value + dist
-            print(base+" LPIPS",dist)
 
             num = num + 1
 
