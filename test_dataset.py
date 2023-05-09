@@ -29,7 +29,7 @@ from torchvision import transforms
 from core.utils import Stack, ToTorchFormatTensor
 from thop import profile, clever_format
 
-parser = argparse.ArgumentParser(description="VHII")
+parser = argparse.ArgumentParser(description="VHII efficient")
 parser.add_argument("--input_path_images", type=str, required=True)
 parser.add_argument("--input_path_masks",   type=str, required=True)
 parser.add_argument("--ckpt",   type=str, required=True)

@@ -72,18 +72,32 @@ class InpaintGenerator(BaseNetwork):
         patchsize = [(4, 4), (8, 8), (16, 16), (32, 32)]
         
         blocks = []
+        reduce_channels=True
+        
+        if reduce_channels:
+           for _ in range(depths[0]):
+               blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[0], embed_dims=embed_dims[0], num_heads=num_heads[0], sr_ratio=sr_ratios[0]))
 
-        for _ in range(depths[0]):
-            blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[0], embed_dims=embed_dims[0], num_heads=num_heads[0], sr_ratio=sr_ratios[0]))
+           for _ in range(depths[1]):
+               blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[1], embed_dims=embed_dims[1], num_heads=num_heads[1], sr_ratio=sr_ratios[1]))
 
-        for _ in range(depths[1]):
-            blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[1], embed_dims=embed_dims[1], num_heads=num_heads[1], sr_ratio=sr_ratios[1]))
+           for _ in range(depths[2]):
+               blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[2], embed_dims=embed_dims[2], num_heads=num_heads[2], sr_ratio=sr_ratios[2]))
 
-        for _ in range(depths[2]):
-            blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[2], embed_dims=embed_dims[2], num_heads=num_heads[2], sr_ratio=sr_ratios[2]))
+           for _ in range(depths[3]):
+               blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[3], embed_dims=embed_dims[3], num_heads=num_heads[3], sr_ratio=sr_ratios[3]))
+        else:
+           for _ in range(depths[0]):
+               blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[0], num_heads=num_heads[0], sr_ratio=sr_ratios[0]))
 
-        for _ in range(depths[3]):
-            blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[3], embed_dims=embed_dims[3], num_heads=num_heads[3], sr_ratio=sr_ratios[3]))
+           for _ in range(depths[1]):
+               blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[1], num_heads=num_heads[1], sr_ratio=sr_ratios[1]))
+
+           for _ in range(depths[2]):
+               blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[2], num_heads=num_heads[2], sr_ratio=sr_ratios[2]))
+
+           for _ in range(depths[3]):
+               blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[3], num_heads=num_heads[3], sr_ratio=sr_ratios[3]))
 
 
         self.transformer = nn.Sequential(*blocks)

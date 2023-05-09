@@ -15,7 +15,7 @@ from core.dist import (
     get_global_rank,
     get_master_ip,
 )
-parser = argparse.ArgumentParser(description='VHII')
+parser = argparse.ArgumentParser(description='VHII efficient')
 parser.add_argument('--config', default='configs/places_proposal.json', type=str)
 args = parser.parse_args()
 

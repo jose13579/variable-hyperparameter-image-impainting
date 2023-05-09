@@ -1,7 +1,7 @@
 {
     "seed": 2023,
-    "save_dir": "trained_models/psv/psv_proposal_inpainting_proposal/",
-    "model": "VHII",
+    "save_dir": "trained_models/psv/psv_VHII_efficient/",
+    "model": "VHII_efficient",
     "data_loader": {
         "name": "psv",
         "data_root": "/data/psv/paris_train/paris_train_original",

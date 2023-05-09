@@ -26,7 +26,7 @@ from core.utils import Stack, ToTorchFormatTensor
 from torch.autograd import Variable
 
 
-parser = argparse.ArgumentParser(description="VHII")
+parser = argparse.ArgumentParser(description="VHII efficient")
 parser.add_argument("--img_path", type=str, required=True)
 parser.add_argument("--mask_path",   type=str, required=True)
 parser.add_argument("--ckpt",   type=str, required=True)

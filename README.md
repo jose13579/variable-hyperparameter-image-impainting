@@ -95,55 +95,55 @@ datasets
                 |- ...
 ``` 
 
-## Results and Models for VHII
+## Results and Models for VHII efficient
 <!-- ---------------------------------------------- -->
 
 ### Places val
 The trained model can be download: [places](https://drive.google.com/file/d/1wi6YDVWRUOH6ZOqscSfFwKQDXwxn5wY7/view?usp=share_link) 
 
-| Model  | Seed | Mask set | FID ↓  | LPIPS ↓ | PSNR ↑  | SSIM ↑ | Model Size (Mb) | FLOPS (G) | # Params (M) | Config
-|--------|------|----------|--------|---------|---------|--------|-----------------|-----------|--------------|--------
-|  VHII  |   0  |  20-30   | 1.1783 | 0.0649  | 26.4769 | 0.8922 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1mmIQ1UDYKvnhETZqGzpmU8GPPkyPjZAG/view?usp=share_link)
-|  VHII  |   0  |  30-40   | 2.3969 | 0.0995  | 24.1554 | 0.8368 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1q62abnjM5rYWUuWPtI4UlAgAqvIh7SHc/view?usp=share_link)
-|  VHII  |   0  |  40-50   | 4.6187 | 0.1404  | 22.3163 | 0.7751 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1txP8UmLEEic5p2MOmUMPEechUWGFES4G/view?usp=share_link)
-|  VHII  |  42  |  20-30   | 1.1806 | 0.0650  | 26.4727 | 0.8922 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1k35WKBFEE_DOR009ompS4ofl1MUcv939/view?usp=share_link)
-|  VHII  |  42  |  30-40   | 2.4146 | 0.0996  | 24.1472 | 0.8366 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1skFoechyXg_7p1IpXHDDvACw36pL9fYk/view?usp=share_link)
-|  VHII  |  42  |  40-50   | 4.6141 | 0.1405  | 22.3215 | 0.7750 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1sk-go4Mmsmgiw7GZDE5CzUPZK7nv0yxa/view?usp=share_link)
-|  VHII  |  123 |  20-30   | 1.1767 | 0.0650  | 26.4536 | 0.8920 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/17DN3gU6gtPU8mzHqIPQ6NiWds7IvPVPp/view?usp=share_link)
-|  VHII  |  123 |  30-40   | 2.4125 | 0.0998  | 24.1337 | 0.8366 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1yz_34BM5sDXBCodcdMX822-Np1wi7w4W/view?usp=share_link)
-|  VHII  |  123 |  40-50   | 4.6877 | 0.1407  | 22.3123 | 0.7749 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1vciKKOYwmaKeG0pcG2SYGW3TpFOthM7E/view?usp=share_link)
+|        Model     | Seed | Mask set | FID ↓  | LPIPS ↓ | PSNR ↑  | SSIM ↑ | Model Size (Mb) | FLOPS (G) | # Params (M) | Config
+|-----------|------|----------|--------|---------|---------|--------|-----------------|-----------|--------------|--------
+|  VHII efficient  |   0  |  20-30   | 1.1783 | 0.0649  | 26.4769 | 0.8922 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1mmIQ1UDYKvnhETZqGzpmU8GPPkyPjZAG/view?usp=share_link)
+|  VHII efficient  |   0  |  30-40   | 2.3969 | 0.0995  | 24.1554 | 0.8368 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1q62abnjM5rYWUuWPtI4UlAgAqvIh7SHc/view?usp=share_link)
+|  VHII efficient  |   0  |  40-50   | 4.6187 | 0.1404  | 22.3163 | 0.7751 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1txP8UmLEEic5p2MOmUMPEechUWGFES4G/view?usp=share_link)
+|  VHII efficient  |  42  |  20-30   | 1.1806 | 0.0650  | 26.4727 | 0.8922 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1k35WKBFEE_DOR009ompS4ofl1MUcv939/view?usp=share_link)
+|  VHII efficient  |  42  |  30-40   | 2.4146 | 0.0996  | 24.1472 | 0.8366 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1skFoechyXg_7p1IpXHDDvACw36pL9fYk/view?usp=share_link)
+|  VHII efficient  |  42  |  40-50   | 4.6141 | 0.1405  | 22.3215 | 0.7750 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1sk-go4Mmsmgiw7GZDE5CzUPZK7nv0yxa/view?usp=share_link)
+|  VHII efficient  |  123 |  20-30   | 1.1767 | 0.0650  | 26.4536 | 0.8920 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/17DN3gU6gtPU8mzHqIPQ6NiWds7IvPVPp/view?usp=share_link)
+|  VHII efficient  |  123 |  30-40   | 2.4125 | 0.0998  | 24.1337 | 0.8366 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1yz_34BM5sDXBCodcdMX822-Np1wi7w4W/view?usp=share_link)
+|  VHII efficient  |  123 |  40-50   | 4.6877 | 0.1407  | 22.3123 | 0.7749 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1vciKKOYwmaKeG0pcG2SYGW3TpFOthM7E/view?usp=share_link)
 
 
 ### Celeba test
 The trained model can be download: [celeba](https://drive.google.com/file/d/1_k0B8ItckZoVB0bPoRsmor7sL-eqQdZU/view?usp=share_link).
 
-| Model  | Seed | Mask set | FID ↓  | LPIPS ↓ | PSNR ↑  | SSIM ↑ | Model Size (Mb) | FLOPS (G) | # Params (M) | Config
-|--------|------|----------|--------|---------|---------|--------|-----------------|-----------|--------------|--------
-|  VHII  |   0  |  20-30   | 0.7854 | 0.0330  | 31.3488 | 0.9415 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/19jW9DHC05YkehYaelNMzguNlpMmWbqO2/view?usp=share_link)
-|  VHII  |   0  |  30-40   | 1.3521 | 0.0490  | 28.7055 | 0.9096 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1EyNjHuqsdPa42GMCDC2wc8y-FhdMtARd/view?usp=share_link)
-|  VHII  |   0  |  40-50   | 2.2800 | 0.0686  | 26.5571 | 0.8727 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1dhdAfHhTnkg9r2PeDsw04z2AFou6pb5x/view?usp=share_link)
-|  VHII  |  42  |  20-30   | 0.7714 | 0.0329  | 31.3497 | 0.9416 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1VokPjmqS1-_xhb5A2llD13mudxqJ4phk/view?usp=share_link)
-|  VHII  |  42  |  30-40   | 1.3552 | 0.0491  | 28.6867 | 0.9096 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1_3uE0b9W2IPF__8XpXk57B0Cy1D_3B83/view?usp=share_link)
-|  VHII  |  42  |  40-50   | 2.2400 | 0.0684  | 26.5921 | 0.8729 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1E2Szkb1VkZxGABjYZwm7snSztOlWpZJq/view?usp=share_link)
-|  VHII  |  123 |  20-30   | 0.7822 | 0.0330  | 31.3313 | 0.9415 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1y6Y4Uq2NIpdpozNfmgVxULBzEbZuwfqo/view?usp=share_link)
-|  VHII  |  123 |  30-40   | 1.3489 | 0.0491  | 28.7198 | 0.9097 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1HbaZxwXQ_zHtVIpnFkh3le_ucoDTEY6T/view?usp=share_link)
-|  VHII  |  123 |  40-50   | 2.2413 | 0.0685  | 26.5672 | 0.8728 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1Qzp0PvoFOykNew8Ukg2Dj8uNd-q8wGQq/view?usp=share_link)
+|        Model      | Seed | Mask set | FID ↓  | LPIPS ↓ | PSNR ↑  | SSIM ↑ | Model Size (Mb) | FLOPS (G) | # Params (M) | Config
+|------------|------|----------|--------|---------|---------|--------|-----------------|-----------|--------------|--------
+|  VHII efficient   |   0  |  20-30   | 0.7854 | 0.0330  | 31.3488 | 0.9415 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/19jW9DHC05YkehYaelNMzguNlpMmWbqO2/view?usp=share_link)
+|  VHII efficient   |   0  |  30-40   | 1.3521 | 0.0490  | 28.7055 | 0.9096 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1EyNjHuqsdPa42GMCDC2wc8y-FhdMtARd/view?usp=share_link)
+|  VHII efficient   |   0  |  40-50   | 2.2800 | 0.0686  | 26.5571 | 0.8727 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1dhdAfHhTnkg9r2PeDsw04z2AFou6pb5x/view?usp=share_link)
+|  VHII efficient   |  42  |  20-30   | 0.7714 | 0.0329  | 31.3497 | 0.9416 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1VokPjmqS1-_xhb5A2llD13mudxqJ4phk/view?usp=share_link)
+|  VHII efficient   |  42  |  30-40   | 1.3552 | 0.0491  | 28.6867 | 0.9096 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1_3uE0b9W2IPF__8XpXk57B0Cy1D_3B83/view?usp=share_link)
+|  VHII efficient   |  42  |  40-50   | 2.2400 | 0.0684  | 26.5921 | 0.8729 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1E2Szkb1VkZxGABjYZwm7snSztOlWpZJq/view?usp=share_link)
+|  VHII efficient   |  123 |  20-30   | 0.7822 | 0.0330  | 31.3313 | 0.9415 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1y6Y4Uq2NIpdpozNfmgVxULBzEbZuwfqo/view?usp=share_link)
+|  VHII efficient   |  123 |  30-40   | 1.3489 | 0.0491  | 28.7198 | 0.9097 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1HbaZxwXQ_zHtVIpnFkh3le_ucoDTEY6T/view?usp=share_link)
+|  VHII efficient   |  123 |  40-50   | 2.2413 | 0.0685  | 26.5672 | 0.8728 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1Qzp0PvoFOykNew8Ukg2Dj8uNd-q8wGQq/view?usp=share_link)
 
 
 ### PSV test
 The trained model can be download: [psv](https://drive.google.com/file/d/1WajIeVHIYBHN1dcEmJJynP0m2g60qAg1/view?usp=share_link).
 
-| Model  | Seed | Mask set | FID ↓  | LPIPS ↓ | PSNR ↑  | SSIM ↑ | Model Size (Mb) | FLOPS (G) | # Params (M) | Config
-|--------|------|----------|---------|---------|---------|--------|-----------------|-----------|--------------|--------
-|  VHII  |   0  |  20-30   | 24.9343 | 0.0535  | 29.9719 | 0.9146 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1rVq94eokt9ofVdLNu3rl-igVDzfIOjGB/view?usp=share_link)
-|  VHII  |   0  |  30-40   | 35.9012 | 0.0787  | 27.6982 | 0.8719 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1TA5vmwGUNdOAdLMtS84tOepdPLvrhBeu/view?usp=share_link)
-|  VHII  |   0  |  40-50   | 46.5952 | 0.1118  | 25.7796 | 0.8209 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1Yc7nwdPv1Z_EYihf8r9fMiRJBc7wZa1V/view?usp=share_link)
-|  VHII  |  42  |  20-30   | 26.6362 | 0.0542  | 29.8541 | 0.9137 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/11HbkNpAsEpxg2MRU-jgJmqYAhDES9t9y/view?usp=share_link)
-|  VHII  |  42  |  30-40   | 35.4199 | 0.0802  | 27.6240 | 0.8699 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/15PvZQ1Sk97wYOR3U7mZtuJKIKur4JoZU/view?usp=share_link)
-|  VHII  |  42  |  40-50   | 47.6322 | 0.1138  | 25.7706 | 0.8187 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1oaclB-xZq15wi8A7N9IhMINSL9BnYmGD/view?usp=share_link)
-|  VHII  |  123 |  20-30   | 26.0129 | 0.0568  | 29.4361 | 0.9110 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1vtqmNulN_WIYqu5Wkp1h162WIy57g82B/view?usp=share_link)
-|  VHII  |  123 |  30-40   | 35.1132 | 0.0794  | 27.7138 | 0.8741 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1mVQJu-gnKa8mbhGyR7BnmqexwfprsrOz/view?usp=share_link)
-|  VHII  |  123 |  40-50   | 47.5585 | 0.1111  | 25.9231 | 0.8231 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1XCbeDZQXDM8Nqx56s26ZNxB8o5iHJ7iH/view?usp=share_link)
+|        Model      | Seed | Mask set | FID ↓  | LPIPS ↓ | PSNR ↑  | SSIM ↑ | Model Size (Mb) | FLOPS (G) | # Params (M) | Config
+|-------------------|------|----------|---------|---------|---------|--------|-----------------|-----------|--------------|--------
+|  VHII efficient   |   0  |  20-30   | 24.9343 | 0.0535  | 29.9719 | 0.9146 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1rVq94eokt9ofVdLNu3rl-igVDzfIOjGB/view?usp=share_link)
+|  VHII efficient   |   0  |  30-40   | 35.9012 | 0.0787  | 27.6982 | 0.8719 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1TA5vmwGUNdOAdLMtS84tOepdPLvrhBeu/view?usp=share_link)
+|  VHII efficient   |   0  |  40-50   | 46.5952 | 0.1118  | 25.7796 | 0.8209 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1Yc7nwdPv1Z_EYihf8r9fMiRJBc7wZa1V/view?usp=share_link)
+|  VHII efficient   |  42  |  20-30   | 26.6362 | 0.0542  | 29.8541 | 0.9137 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/11HbkNpAsEpxg2MRU-jgJmqYAhDES9t9y/view?usp=share_link)
+|  VHII efficient   |  42  |  30-40   | 35.4199 | 0.0802  | 27.6240 | 0.8699 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/15PvZQ1Sk97wYOR3U7mZtuJKIKur4JoZU/view?usp=share_link)
+|  VHII efficient   |  42  |  40-50   | 47.6322 | 0.1138  | 25.7706 | 0.8187 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1oaclB-xZq15wi8A7N9IhMINSL9BnYmGD/view?usp=share_link)
+|  VHII efficient   |  123 |  20-30   | 26.0129 | 0.0568  | 29.4361 | 0.9110 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1vtqmNulN_WIYqu5Wkp1h162WIy57g82B/view?usp=share_link)
+|  VHII efficient   |  123 |  30-40   | 35.1132 | 0.0794  | 27.7138 | 0.8741 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1mVQJu-gnKa8mbhGyR7BnmqexwfprsrOz/view?usp=share_link)
+|  VHII efficient   |  123 |  40-50   | 47.5585 | 0.1111  | 25.9231 | 0.8231 |       71        |  150.272  |   17.552     | [config](https://drive.google.com/file/d/1XCbeDZQXDM8Nqx56s26ZNxB8o5iHJ7iH/view?usp=share_link)
 
 
 ## Results and Models for VHII efficient
@@ -196,7 +196,7 @@ bash run_test_dataset.sh --model_name --model_path --seed --gt_dataset_path --ma
 
 For example:
 ```
-bash run_test_dataset.sh "VHII" "trained_models/celeba/celeba_VHII/gen_00050.pth" 0 "/data/celeba/celeba_dataset/test/" "/data/pconv/test_mask/20-30/" "test_output_datasets/trained_celeba_VHII_seed_0"
+bash run_test_dataset.sh "VHII_efficient" "trained_models/celeba/celeba_VHII_efficient/gen_00050.pth" 0 "/data/celeba/celeba_dataset/test/" "/data/pconv/test_mask/20-30/" "test_output_datasets/trained_celeba_VHII_efficient_seed_0"
 ```
 The outputs inpainted images are saved at ```test_output_datasets/```.  
 
@@ -212,7 +212,7 @@ bash run_metrics.sh --gt_dataset_path --output_dataset_path
 For example:
 
 ```
-bash run_metrics.sh "/data/celeba/celeba_dataset/test/" "/config/variable-hyperparameter-image-impainting/test_output_datasets/trained_celeba_VHII_seed_0"
+bash run_metrics.sh "/data/celeba/celeba_dataset/test/" "/config/variable-hyperparameter-image-impainting/test_output_datasets/trained_celeba_VHII_efficient_seed_0"
 ```
 
 <!-- ---------------------------------------------- -->
@@ -227,7 +227,7 @@ bash run_test_image.sh --model_name --model_path --input_path --mask_path --outp
 For example:
 
 ```
-bash run_test_image.sh "VHII" trained_models/celeba/celeba_VHII/gen_00050.pth "examples/img/100_000100_gt.png" "examples/mask/100_000100_mask.png" "examples/output" "100_000100_output"
+bash run_test_image.sh "VHII_efficient" trained_models/celeba/celeba_VHII_efficient/gen_00050.pth "examples/img/100_000100_gt.png" "examples/mask/100_000100_mask.png" "examples/output" "100_000100_output"
 ```
 
 <!-- ---------------------------------------------- -->
@@ -239,7 +239,7 @@ bash run_test_image.sh "VHII" trained_models/celeba/celeba_VHII/gen_00050.pth "e
 
 <!-- ---------------------------------------------- -->
 
-## Citing VHII
+## Citing VHII efficient
 
 ```BibTeX
 @article{Campana2023_Inpainting,

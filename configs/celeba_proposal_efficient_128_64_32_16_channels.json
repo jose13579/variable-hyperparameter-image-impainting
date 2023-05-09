@@ -1,6 +1,6 @@
 {
     "seed": 2023,
-    "save_dir": "trained_models/celeba/celeba_proposal_inpainting_proposal_efficient_128_64_32_16_channels/",
+    "save_dir": "trained_models/celeba/celeba_VHII_efficient_128_64_32_16_channels/",
     "model": "VHII_efficient_128_64_32_16",
     "data_loader": {
         "name": "celeba",

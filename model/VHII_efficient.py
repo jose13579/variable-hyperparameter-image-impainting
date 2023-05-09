@@ -64,30 +64,45 @@ class BaseNetwork(nn.Module):
 class InpaintGenerator(BaseNetwork):
     def __init__(self, init_weights=True):
         super(InpaintGenerator, self).__init__()
-        embed_dims=[256, 256, 256, 256]
+        embed_hidden=[256, 256, 256, 256]
+        embed_dims = [256, 256, 256, 256] 
         num_heads=[8, 4, 2, 1]
         depths=[2, 2, 2, 2]
         sr_ratios=[1, 1, 1, 1]
         patchsize = [(4, 4), (8, 8), (16, 16), (32, 32)]
         
         blocks = []
+        reduce_channels=False
+        
+        if reduce_channels:
+           for _ in range(depths[0]):
+               blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[0], embed_dims=embed_dims[0], num_heads=num_heads[0], sr_ratio=sr_ratios[0]))
 
-        for _ in range(depths[0]):
-            blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[0], num_heads=num_heads[0], sr_ratio=sr_ratios[0]))
+           for _ in range(depths[1]):
+               blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[1], embed_dims=embed_dims[1], num_heads=num_heads[1], sr_ratio=sr_ratios[1]))
 
-        for _ in range(depths[1]):
-            blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[1], num_heads=num_heads[1], sr_ratio=sr_ratios[1]))
+           for _ in range(depths[2]):
+               blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[2], embed_dims=embed_dims[2], num_heads=num_heads[2], sr_ratio=sr_ratios[2]))
 
-        for _ in range(depths[2]):
-            blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[2], num_heads=num_heads[2], sr_ratio=sr_ratios[2]))
+           for _ in range(depths[3]):
+               blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[3], embed_dims=embed_dims[3], num_heads=num_heads[3], sr_ratio=sr_ratios[3]))
+        else:
+           for _ in range(depths[0]):
+               blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[0], num_heads=num_heads[0], sr_ratio=sr_ratios[0]))
 
-        for _ in range(depths[3]):
-            blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[3], num_heads=num_heads[3], sr_ratio=sr_ratios[3]))
+           for _ in range(depths[1]):
+               blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[1], num_heads=num_heads[1], sr_ratio=sr_ratios[1]))
+
+           for _ in range(depths[2]):
+               blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[2], num_heads=num_heads[2], sr_ratio=sr_ratios[2]))
+
+           for _ in range(depths[3]):
+               blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[3], num_heads=num_heads[3], sr_ratio=sr_ratios[3]))
 
 
         self.transformer = nn.Sequential(*blocks)
         
-        self.add_pos_emb = AddPosEmb(64,64, embed_dims[0])
+        self.add_pos_emb = AddPosEmb(64,64, embed_hidden[0])
 
         self.encoder = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=3, stride=2, padding=1, padding_mode='reflect'),
@@ -96,13 +111,13 @@ class InpaintGenerator(BaseNetwork):
             nn.LeakyReLU(0.2, inplace=True),
             nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1, padding_mode='reflect'),
             nn.LeakyReLU(0.2, inplace=True),
-            nn.Conv2d(128, embed_dims[0], kernel_size=3, stride=1, padding=1, padding_mode='reflect'),
+            nn.Conv2d(128, embed_hidden[0], kernel_size=3, stride=1, padding=1, padding_mode='reflect'),
             nn.LeakyReLU(0.2, inplace=True),
         )
 
         # decoder: decode frames from features
         self.decoder = nn.Sequential(
-            pixelup(embed_dims[3], 128, kernel_size=3, padding=1),
+            pixelup(embed_hidden[3], 128, kernel_size=3, padding=1),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Conv2d(128, 64, kernel_size=3, stride=1, padding=1, padding_mode='reflect'),
             nn.LeakyReLU(0.2, inplace=True),
@@ -129,7 +144,7 @@ class InpaintGenerator(BaseNetwork):
         output = self.decoder(enc_feat)
         output = torch.tanh(output)
         return output
-
+        
 
 class pixelup(nn.Module):
     def __init__(self, input_channel, output_channel, kernel_size=3, padding=0):
@@ -159,7 +174,20 @@ class deconv(nn.Module):
 # #############################################################################
 # ############################# Transformer  ##################################
 # #############################################################################
+def conv_1x1_bn(inp, oup):
+    return nn.Sequential(
+        nn.Conv2d(inp, oup, 1, 1, 0),
+        nn.LeakyReLU(0.2, inplace=True)
+    )
 
+
+def conv_nxn_bn(inp, oup, kernal_size=3, stride=1):
+    return nn.Sequential(
+        nn.Conv2d(inp, oup, kernal_size, stride, 1),
+        nn.LeakyReLU(0.2, inplace=True)
+    )
+    
+    
 class AddPosEmb(nn.Module):
     def __init__(self, h, w, c):
         super(AddPosEmb, self).__init__()
@@ -172,6 +200,7 @@ class AddPosEmb(nn.Module):
         x = x + self.pos_emb
         x = x.permute(0,1,3,2).contiguous().view(b, c, h, w)
         return x
+
 
 class Attention(nn.Module):
     """
@@ -249,7 +278,7 @@ class MultiHeadedAttention(nn.Module):
 
             y, _ = self.attention(query, key, value, mm)
 
-            # 3) "Concat" using a view and apply a final linear.
+            # 2) "Concat" using a view and apply a final linear.
             y = y.view(b, out_h, out_w, d_k, height, width)
             y = y.permute(0, 3, 1, 4, 2, 5).contiguous().view(b, d_k, h, w)
             output.append(y)
@@ -262,7 +291,6 @@ class MultiHeadedAttention(nn.Module):
 class FeedForward(nn.Module):
     def __init__(self, d_model):
         super(FeedForward, self).__init__()
-        # We set d_ff as a default to 2048
         self.conv = nn.Sequential(
             nn.Conv2d(d_model, d_model, kernel_size=3, padding=2, dilation=2, padding_mode='reflect'),
             nn.LeakyReLU(0.2, inplace=True),
@@ -278,7 +306,7 @@ class TransformerBlock(nn.Module):
     """
     Transformer = MultiHead_Attention + Feed_Forward with sublayer connection
     """
-
+    
     def __init__(self, patchsize, embed_dims=128, num_heads=4, sr_ratio=1):
         super().__init__()
         
@@ -287,8 +315,45 @@ class TransformerBlock(nn.Module):
 
     def forward(self, x):
         x, m = x['x'], x['m']
+
+        # Self-attention
         x = x + self.attention(x, m)
+
+        # FFN
         x = x + self.feed_forward(x)
+
+        return {'x': x, 'm': m}
+        
+        
+class DepthWiseTransformerBlock(nn.Module):
+    """
+    MobileVitTransformer = Depthwise Separable Conv + Transformer + Depthwise Separable Conv
+    """
+    def __init__(self, patchsize, hidden=128, embed_dims=128, num_heads=4, sr_ratio=1, kernel_size=3, reduce_channels=True):
+        super().__init__()
+        self.hidden = hidden
+        self.embed_dims = embed_dims
+        self.conv1 = conv_nxn_bn(hidden, hidden, kernel_size)
+        self.conv2 = conv_1x1_bn(hidden, embed_dims)
+
+        self.transformer = TransformerBlock(patchsize, embed_dims=embed_dims, num_heads=num_heads)
+
+        self.conv3 = conv_1x1_bn(embed_dims, hidden)
+        self.conv4 = conv_nxn_bn(hidden, hidden, kernel_size)
+    
+    def forward(self, x):
+        x, m = x['x'], x['m']
+
+        # Local representations
+        x = self.conv1(x)
+        x = self.conv2(x)
+        
+        # Global representations
+        x = self.transformer({'x': x, 'm': m})['x']
+
+        # Fusion
+        x = self.conv3(x)
+        x = self.conv4(x)
         return {'x': x, 'm': m}
 
 
@@ -305,23 +370,18 @@ class Discriminator(BaseNetwork):
         self.conv = nn.Sequential(
             spectral_norm(nn.Conv2d(in_channels=in_channels, out_channels=nf*1, kernel_size=5, stride=2,
                                     padding=1, bias=not use_spectral_norm, padding_mode='reflect'), use_spectral_norm),
-            # nn.InstanceNorm2d(64, track_running_stats=False),
             nn.LeakyReLU(0.2, inplace=True),
             spectral_norm(nn.Conv2d(nf*1, nf*2, kernel_size=5, stride=2,
                                     padding=2, bias=not use_spectral_norm, padding_mode='reflect'), use_spectral_norm),
-            # nn.InstanceNorm2d(128, track_running_stats=False),
             nn.LeakyReLU(0.2, inplace=True),
             spectral_norm(nn.Conv2d(nf * 2, nf * 4, kernel_size=5, stride=2,
                                     padding=2, bias=not use_spectral_norm, padding_mode='reflect'), use_spectral_norm),
-            # nn.InstanceNorm2d(256, track_running_stats=False),
             nn.LeakyReLU(0.2, inplace=True),
             spectral_norm(nn.Conv2d(nf * 4, nf * 4, kernel_size=5, stride=2,
                                     padding=2, bias=not use_spectral_norm, padding_mode='reflect'), use_spectral_norm),
-            # nn.InstanceNorm2d(256, track_running_stats=False),
             nn.LeakyReLU(0.2, inplace=True),
             spectral_norm(nn.Conv2d(nf * 4, nf * 4, kernel_size=5, stride=2,
                                     padding=2, bias=not use_spectral_norm, padding_mode='reflect'), use_spectral_norm),
-            # nn.InstanceNorm2d(256, track_running_stats=False),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Conv2d(nf * 4, nf * 4, kernel_size=5,
                       stride=2, padding=2, padding_mode='reflect')
