@@ -163,8 +163,9 @@ def main_worker():
    totalTime = totalTime / total_number
    print("--- %s seconds ---" % totalTime)
    macs, params = profile(model,inputs=(masked_imgs,masks))
-   macs, params = clever_format([macs, params], "%.3f")
-   print(" --- macs: ",macs, " params: ",params, " flops: ", 2*macs)
+   flops = 2*macs
+   macs, params, flops = clever_format([macs, params, flops], "%.3f")
+   print(" --- macs: ",macs, " params: ",params, " flops: ", flops)
    print('Finish')
 
 
