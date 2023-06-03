@@ -22,7 +22,7 @@ conda activate vhii
 Or use the Dockerfile to install conda and prerequisites, e.g.
 
 ```
-Docker build -t VHII-image .
+docker build -t vhii-mage .
 ```
 
 <!-- ---------------------------------------------- -->
