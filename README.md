@@ -25,6 +25,13 @@ Or use the Dockerfile to install conda and prerequisites, e.g.
 docker build -t vhii-mage .
 ```
 
+If you are having issues to install the environment, we suggest you follow the next steps:
+- Remove the cupy from the environment.yml
+- Create the conda env
+- Manually install the cupy with the correct version:
+``` 
+conda install -c conda-force cupy==7.7.0
+```
 <!-- ---------------------------------------------- -->
 ## Dataset Preparation
 
@@ -79,7 +86,7 @@ datasets
            |- <image_id>.jpg
 ``` 
 
-**Preparing Mask Dataset.** The dataset can be downloaded from [here](https://www.dropbox.com/s/01dfayns9s0kevy/test_mask.zip?dl=0). This mask dataset contains 12,000 irregular masks grouped into six intervals according to the mask area on the total image size, where each interval has 2,000 masks. We employed three intervals (20-30%, 30-40%, and 40-50%) for validation. The dataset should be arranged in the same directory structure as
+**Preparing Mask Dataset.** The dataset can be downloaded from [here](https://www.dropbox.com/s/01dfayns9s0kevy/test_mask.zip?dl=0). This mask dataset contains 12,000 irregular masks grouped into six intervals according to the mask area on the total image size, where each interval has 2,000 masks. We employed three intervals (20-30%, 30-40%, and 40-50%) for test. The dataset should be arranged in the same directory structure as
 
 ```
 datasets
@@ -94,6 +101,7 @@ datasets
                     |- <mask_id>.png
                 |- ...
 ``` 
+Or you can use the dataset grouped into directories per interval [here](https://drive.google.com/file/d/1vsdifS0OYtZOv2tCkaJBdmpMpi77oYyB/view?usp=sharing).
 
 ## Results and Models for VHII efficient
 <!-- ---------------------------------------------- -->
@@ -206,13 +214,13 @@ The outputs inpainted images are saved at ```test_output_datasets/```.
 
 To measure the quantitative results:
 ```
-bash run_metrics.sh --gt_dataset_path --output_dataset_path
+bash metrics/run_metrics.sh --gt_dataset_path --output_dataset_path
 ```
 
 For example:
 
 ```
-bash run_metrics.sh "/data/celeba/celeba_dataset/test/" "/config/variable-hyperparameter-image-impainting/test_output_datasets/trained_celeba_VHII_efficient_seed_0"
+bash metrics/run_metrics.sh "/data/celeba/celeba_dataset/test/" "/config/variable-hyperparameter-image-impainting/test_output_datasets/trained_celeba_VHII_efficient_seed_0"
 ```
 
 <!-- ---------------------------------------------- -->
@@ -228,6 +236,24 @@ For example:
 
 ```
 bash run_test_image.sh "VHII_efficient" trained_models/celeba/celeba_VHII_efficient/gen_00050.pth "examples/img/100_000100_gt.png" "examples/mask/100_000100_mask.png" "examples/output" "100_000100_output"
+```
+
+## RECOMENDATION
+If you are having problems to test our model (e.g celeba), I suggest you follow the next steps:
+
+- Use the images from examples/ directory, there you can find the examples that you can use to test the proposed model 
+- Download the celeba model [here](https://drive.google.com/file/d/1_k0B8ItckZoVB0bPoRsmor7sL-eqQdZU/view) and put it inside the directory "trained_models/celeba/celeba_VHII_efficient"
+- Create the docker image
+```
+docker build -t vhii-mage .
+```
+- Create a repository
+```
+nvidia-docker run --userns=host -it --rm --name vhii-repository -v /work/data/:/data -v /work/code/:/code vhii-mage bash
+```
+- Inside the docker repository, you can run the test command
+```
+bash run_test_image.sh "VHII_efficient" trained_models/celeba/celeba_VHII_efficient/best_model_celeba.pth "examples/img/100_000100_gt.png" "examples/mask/100_000100_mask.png" "examples/output" "100_000100_output"
 ```
 
 <!-- ---------------------------------------------- -->
