@@ -183,7 +183,6 @@ class Trainer():
 
     # train entry
     def train(self):
-        print("TRAINING!!")
         pbar = range(int(self.train_args['iterations']))
         if self.config['global_rank'] == 0:
             pbar = tqdm(pbar, initial=self.iteration, dynamic_ncols=True, smoothing=0.01)
@@ -208,8 +207,8 @@ class Trainer():
 
             images, masks = images.to(device), masks.to(device)
             b, c, h, w = images.size()
-            masked_frame = (images * (1 - masks).float())
-            pred_img = self.netG(masked_frame, masks)
+            masked_images = (images * (1 - masks).float())
+            pred_img = self.netG(masked_images, masks)
             images = images.view(b, c, h, w)
             masks = masks.view(b, 1, h, w)
             comp_img = images*(1.-masks) + masks*pred_img
