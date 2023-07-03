@@ -115,7 +115,7 @@ class InpaintGenerator(BaseNetwork):
             nn.LeakyReLU(0.2, inplace=True),
         )
 
-        # decoder: decode frames from features
+        # decoder: decode images from features
         self.decoder = nn.Sequential(
             pixelup(embed_hidden[3], 128, kernel_size=3, padding=1),
             nn.LeakyReLU(0.2, inplace=True),
@@ -129,12 +129,12 @@ class InpaintGenerator(BaseNetwork):
         if init_weights:
             self.init_weights()
 
-    def forward(self, masked_frames, masks):
+    def forward(self, masked_images, masks):
         # extracting features
-        b, c, h, w = masked_frames.size()
+        b, c, h, w = masked_images.size()
         masks = masks.view(b, 1, h, w)
         
-        enc_feat = self.encoder(masked_frames.view(b, c, h, w))
+        enc_feat = self.encoder(masked_images.view(b, c, h, w))
         _, c, h, w = enc_feat.size()
         masks = F.interpolate(masks, scale_factor=1.0/4)
  
