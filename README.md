@@ -214,13 +214,14 @@ The outputs inpainted images are saved at ```test_output_datasets/```.
 
 To measure the quantitative results:
 ```
-bash metrics/run_metrics.sh --gt_dataset_path --output_dataset_path
+cd metrics
+bash run_metrics.sh --gt_dataset_path --output_dataset_path
 ```
 
 For example:
 
 ```
-bash metrics/run_metrics.sh "/data/celeba/celeba_dataset/test/" "/config/variable-hyperparameter-image-impainting/test_output_datasets/trained_celeba_VHII_efficient_seed_0"
+bash run_metrics.sh "/data/celeba/celeba_dataset/test/" "/config/variable-hyperparameter-image-impainting/test_output_datasets/trained_celeba_VHII_efficient_seed_0"
 ```
 
 <!-- ---------------------------------------------- -->
