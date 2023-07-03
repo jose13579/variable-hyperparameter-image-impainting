@@ -204,7 +204,7 @@ bash run_test_dataset.sh --model_name --model_path --seed --gt_dataset_path --ma
 
 For example:
 ```
-bash run_test_dataset.sh "VHII_efficient" "trained_models/celeba/celeba_VHII_efficient/gen_00050.pth" 0 "/data/celeba/celeba_dataset/test/" "/data/pconv/test_mask/20-30/" "test_output_datasets/trained_celeba_VHII_efficient_seed_0"
+bash run_test_dataset.sh "VHII_efficient" "trained_models/celeba/celeba_VHII_efficient/gen_00050.pth" 0 "/data/celeba/celeba_dataset/test/" "/data/pconv/test_mask/20-30/" "test_output_datasets/trained_celeba_VHII_efficient_seed_0/output_images"
 ```
 The outputs inpainted images are saved at ```test_output_datasets/```.  
 
