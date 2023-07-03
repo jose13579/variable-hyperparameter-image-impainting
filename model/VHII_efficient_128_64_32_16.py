@@ -76,28 +76,28 @@ class InpaintGenerator(BaseNetwork):
         
         if reduce_channels:
            for _ in range(depths[0]):
-               blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[0], embed_dims=embed_dims[0], num_heads=num_heads[0], sr_ratio=sr_ratios[0]))
+               blocks.append(DepthWiseTransformerBlock(patchsize[3], hidden=embed_hidden[0], embed_dims=embed_dims[0], num_heads=num_heads[0], sr_ratio=sr_ratios[0]))
 
            for _ in range(depths[1]):
-               blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[1], embed_dims=embed_dims[1], num_heads=num_heads[1], sr_ratio=sr_ratios[1]))
+               blocks.append(DepthWiseTransformerBlock(patchsize[2], hidden=embed_hidden[1], embed_dims=embed_dims[1], num_heads=num_heads[1], sr_ratio=sr_ratios[1]))
 
            for _ in range(depths[2]):
-               blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[2], embed_dims=embed_dims[2], num_heads=num_heads[2], sr_ratio=sr_ratios[2]))
+               blocks.append(DepthWiseTransformerBlock(patchsize[1], hidden=embed_hidden[2], embed_dims=embed_dims[2], num_heads=num_heads[2], sr_ratio=sr_ratios[2]))
 
            for _ in range(depths[3]):
-               blocks.append(DepthWiseTransformerBlock(patchsize, hidden=embed_hidden[3], embed_dims=embed_dims[3], num_heads=num_heads[3], sr_ratio=sr_ratios[3]))
+               blocks.append(DepthWiseTransformerBlock(patchsize[0], hidden=embed_hidden[3], embed_dims=embed_dims[3], num_heads=num_heads[3], sr_ratio=sr_ratios[3]))
         else:
            for _ in range(depths[0]):
-               blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[0], num_heads=num_heads[0], sr_ratio=sr_ratios[0]))
+               blocks.append(TransformerBlock(patchsize[3], embed_dims=embed_dims[0], num_heads=num_heads[0], sr_ratio=sr_ratios[0]))
 
            for _ in range(depths[1]):
-               blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[1], num_heads=num_heads[1], sr_ratio=sr_ratios[1]))
+               blocks.append(TransformerBlock(patchsize[2], embed_dims=embed_dims[1], num_heads=num_heads[1], sr_ratio=sr_ratios[1]))
 
            for _ in range(depths[2]):
-               blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[2], num_heads=num_heads[2], sr_ratio=sr_ratios[2]))
+               blocks.append(TransformerBlock(patchsize[1], embed_dims=embed_dims[2], num_heads=num_heads[2], sr_ratio=sr_ratios[2]))
 
            for _ in range(depths[3]):
-               blocks.append(TransformerBlock(patchsize, embed_dims=embed_dims[3], num_heads=num_heads[3], sr_ratio=sr_ratios[3]))
+               blocks.append(TransformerBlock(patchsize[0], embed_dims=embed_dims[3], num_heads=num_heads[3], sr_ratio=sr_ratios[3]))
 
 
         self.transformer = nn.Sequential(*blocks)
@@ -115,7 +115,7 @@ class InpaintGenerator(BaseNetwork):
             nn.LeakyReLU(0.2, inplace=True),
         )
 
-        # decoder: decode frames from features
+        # decoder: decode images from features
         self.decoder = nn.Sequential(
             pixelup(embed_hidden[3], 128, kernel_size=3, padding=1),
             nn.LeakyReLU(0.2, inplace=True),
@@ -129,12 +129,12 @@ class InpaintGenerator(BaseNetwork):
         if init_weights:
             self.init_weights()
 
-    def forward(self, masked_frames, masks):
+    def forward(self, masked_images, masks):
         # extracting features
-        b, c, h, w = masked_frames.size()
+        b, c, h, w = masked_images.size()
         masks = masks.view(b, 1, h, w)
         
-        enc_feat = self.encoder(masked_frames.view(b, c, h, w))
+        enc_feat = self.encoder(masked_images.view(b, c, h, w))
         _, c, h, w = enc_feat.size()
         masks = F.interpolate(masks, scale_factor=1.0/4)
  
@@ -144,7 +144,7 @@ class InpaintGenerator(BaseNetwork):
         output = self.decoder(enc_feat)
         output = torch.tanh(output)
         return output
-
+        
 
 class pixelup(nn.Module):
     def __init__(self, input_channel, output_channel, kernel_size=3, padding=0):
@@ -207,12 +207,11 @@ class Attention(nn.Module):
     Compute 'Scaled Dot Product Attention
     """
 
-    def forward(self, query, key, value, m):
-        scores = torch.matmul(query, key.transpose(-2, -1)
-                              ) / math.sqrt(query.size(-1))
-        scores.masked_fill(m, -1e9)
-        p_attn = F.softmax(scores, dim=-1)
-        p_val = torch.matmul(p_attn, value)
+    def forward(self, query, key, value, mask):
+        att = (query @ key.transpose(-2, -1)) * (1.0 / math.sqrt(key.size(-1)))
+        att.masked_fill(mask, -1e9)
+        p_attn = F.softmax(att, dim=-1)
+        p_val = p_attn @ value
         return p_val, p_attn
 
 
@@ -223,7 +222,7 @@ class MultiHeadedAttention(nn.Module):
 
     def __init__(self, patchsize, embed_dims, num_heads, sr_ratio):
         super().__init__()
-        self.patchsize = [patchsize[int(np.log2(num_heads))]]*num_heads
+        self.patchsize = patchsize
         self.embed_dims = embed_dims
         self.num_heads = num_heads
         self.query_embedding = nn.Conv2d(
@@ -236,54 +235,40 @@ class MultiHeadedAttention(nn.Module):
             nn.Conv2d(embed_dims, embed_dims, kernel_size=3, padding=1, padding_mode='reflect'),
             nn.LeakyReLU(0.2, inplace=True))
         self.attention = Attention()
-        self.sr_ratio = sr_ratio
 
-        if sr_ratio > 1:
-            self.sr = nn.Conv2d(embed_dims, embed_dims, kernel_size=sr_ratio, stride=sr_ratio)
+    def forward(self, x, mask=None):
+        b, c, h, w = x.size()
+        num_dims_per_head = self.embed_dims // self.num_heads
 
-    def forward(self, x, m):
-        b, _, h, w = x.size()
-        d_k = self.embed_dims // self.num_heads
-        output = []
+        query = self.query_embedding(x)
+        key = self.key_embedding(x)
+        value = self.value_embedding(x)
+       
+        height = self.patchsize[0]
+        width = self.patchsize[1]
+        out_w, out_h = w // height, h // width
 
-        _query = self.query_embedding(x)
-        if self.sr_ratio > 1:
-            x_ = x.view(b, c, h, w)
-            x_ = self.sr(x_)
-            _key = self.key_embedding(x_)
-            _value = self.value_embedding(x_)
-        else:
-            _key = self.key_embedding(x)
-            _value = self.value_embedding(x)
+        mask = mask.view(b, 1, 1, out_h, height, out_w, width)
+        mask = mask.permute(0, 1, 3, 5, 2, 4, 6).contiguous().view(b, 1, out_h*out_w, height*width)
+        mask = (mask.mean(-1) > 0.5).unsqueeze(1).repeat(1, 1, out_h*out_w, 1)
 
-        for (width, height), query, key, value in zip(self.patchsize,
-                                                      torch.chunk(_query, len(self.patchsize), dim=1), 
-                                                      torch.chunk(_key, len(self.patchsize), dim=1),
-                                                      torch.chunk(_value, len(self.patchsize), dim=1)):
-               
-            out_w, out_h = w // width, h // height
-            mm = m.view(b, 1, out_h, height, out_w, width)
-            mm = mm.permute(0, 2, 4, 1, 3, 5).contiguous().view(b,  out_h*out_w, height*width)
-            mm = (mm.mean(-1) > 0.5).unsqueeze(1).repeat(1, out_h*out_w, 1)
+        # 1) embedding and reshape
+        query = query.view(b, self.num_heads, num_dims_per_head, out_h, height, out_w, width)
+        query = query.permute(0, 1, 3, 5, 2, 4, 6).contiguous().view(b,  self.num_heads, out_h*out_w, num_dims_per_head*height*width)
 
-            # 1) embedding and reshape
-            query = query.view(b, d_k, out_h, height, out_w, width)
-            query = query.permute(0, 2, 4, 1, 3, 5).contiguous().view(b,  out_h*out_w, d_k*height*width)
+        key = key.view(b, self.num_heads, num_dims_per_head, out_h, height, out_w, width)
+        key = key.permute(0, 1, 3, 5, 2, 4, 6).contiguous().view(b,  self.num_heads, out_h*out_w, num_dims_per_head*height*width)
             
-            key = key.view(b, d_k, out_h, height, out_w, width)
-            key = key.permute(0, 2, 4, 1, 3, 5).contiguous().view(b,  out_h*out_w, d_k*height*width)
-            
-            value = value.view(b, d_k, out_h, height, out_w, width)
-            value = value.permute(0, 2, 4, 1, 3, 5).contiguous().view(b,  out_h*out_w, d_k*height*width)
+        value = value.view(b, self.num_heads, num_dims_per_head, out_h, height, out_w, width)
+        value = value.permute(0, 1, 3, 5, 2, 4, 6).contiguous().view(b,  self.num_heads, out_h*out_w, num_dims_per_head*height*width)
 
-            y, _ = self.attention(query, key, value, mm)
+        y, _ = self.attention(query, key, value, mask)
 
-            # 3) "Concat" using a view and apply a final linear.
-            y = y.view(b, out_h, out_w, d_k, height, width)
-            y = y.permute(0, 3, 1, 4, 2, 5).contiguous().view(b, d_k, h, w)
-            output.append(y)
-        output = torch.cat(output, 1)
-        x = self.output_linear(output)
+        # 2) "Concat" using a view and apply a final linear.
+        y = y.view(b, self.num_heads, out_h, out_w, num_dims_per_head, height, width)
+        y = y.permute(0, 1, 4, 2, 5, 3, 6).contiguous().view(b, self.num_heads * num_dims_per_head, h, w)
+
+        x = self.output_linear(y)
         return x
 
 
@@ -291,7 +276,6 @@ class MultiHeadedAttention(nn.Module):
 class FeedForward(nn.Module):
     def __init__(self, d_model):
         super(FeedForward, self).__init__()
-        # We set d_ff as a default to 2048
         self.conv = nn.Sequential(
             nn.Conv2d(d_model, d_model, kernel_size=3, padding=2, dilation=2, padding_mode='reflect'),
             nn.LeakyReLU(0.2, inplace=True),
@@ -307,6 +291,7 @@ class TransformerBlock(nn.Module):
     """
     Transformer = MultiHead_Attention + Feed_Forward with sublayer connection
     """
+    
     def __init__(self, patchsize, embed_dims=128, num_heads=4, sr_ratio=1):
         super().__init__()
         
@@ -315,16 +300,21 @@ class TransformerBlock(nn.Module):
 
     def forward(self, x):
         x, m = x['x'], x['m']
+
+        # Self-attention
         x = x + self.attention(x, m)
+
+        # FFN
         x = x + self.feed_forward(x)
+
         return {'x': x, 'm': m}
         
         
 class DepthWiseTransformerBlock(nn.Module):
     """
-    MobileVitTransformer = Depthwise separable conv + Transformer + Depthwise separable conv
+    MobileVitTransformer = Depthwise Separable Conv + Transformer + Depthwise Separable Conv
     """
-    def __init__(self, patchsize, hidden=128, embed_dims=128, num_heads=4, sr_ratio=1, kernel_size=3):
+    def __init__(self, patchsize, hidden=128, embed_dims=128, num_heads=4, sr_ratio=1, kernel_size=3, reduce_channels=True):
         super().__init__()
         self.hidden = hidden
         self.embed_dims = embed_dims
@@ -340,17 +330,15 @@ class DepthWiseTransformerBlock(nn.Module):
         x, m = x['x'], x['m']
 
         # Local representations
-        if self.hidden != self.embed_dims:
-           x = self.conv1(x)
-           x = self.conv2(x)
+        x = self.conv1(x)
+        x = self.conv2(x)
         
         # Global representations
         x = self.transformer({'x': x, 'm': m})['x']
 
         # Fusion
-        if self.hidden != self.embed_dims:
-           x = self.conv3(x)
-           x = self.conv4(x)
+        x = self.conv3(x)
+        x = self.conv4(x)
         return {'x': x, 'm': m}
 
 
