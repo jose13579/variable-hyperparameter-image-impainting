@@ -69,7 +69,6 @@ if __name__ == "__main__":
     print("get_world_size(): ",get_world_size())
     # setup distributed parallel training environments
     if get_master_ip() == "127.0.0.2":
-        print("PARALLEL")
         # manually launch distributed processes 
         mp.spawn(main_worker, nprocs=config['world_size'], args=(config,))
     else:

@@ -46,7 +46,7 @@ _to_tensors = transforms.Compose([
     Stack(),
     ToTorchFormatTensor()])
 
-# read frame-wise masks 
+# read images-wise masks 
 def read_mask(mpath):
     m = Image.open(mpath)
     m = m.resize((w, h), Image.NEAREST)
@@ -70,12 +70,12 @@ def main_worker():
     base=os.path.basename(args.mask_path)
     base=os.path.splitext(base)[0]
 
-    # prepare dataset, encode all frames into deep space 
-    frames = Image.open(args.img_path).convert('RGB')
-    frames = frames.resize((w, h))
+    # prepare dataset, encode all images into deep space 
+    images = Image.open(args.img_path).convert('RGB')
+    images = images.resize((w, h))
 
-    feats = _to_tensors(frames).unsqueeze(0)*2-1
-    frames = np.array(frames).astype(np.uint8)
+    feats = _to_tensors(images).unsqueeze(0)*2-1
+    images = np.array(images).astype(np.uint8)
 
     masks = read_mask(args.mask_path)
     binary_masks = np.expand_dims((np.array(masks) != 0).astype(np.uint8), 2)
@@ -95,11 +95,11 @@ def main_worker():
     print('loading image and mask from: {} and {}'.format(args.img_path,args.mask_path))
         
     inpainted_img = np.array(pred_img[0]).astype(np.uint8)
-    inpainted_img = inpainted_img*(binary_masks)+frames*(1-binary_masks)
+    inpainted_img = inpainted_img*(binary_masks)+images*(1-binary_masks)
     
-    incompleted_img = frames*(1-binary_masks)+255*binary_masks
+    incompleted_img = images*(1-binary_masks)+255*binary_masks
     
-    cv2.imwrite(f"{output_path}/{base}_groundtruth_{args.output_name}.png",frames[...,::-1])
+    cv2.imwrite(f"{output_path}/{base}_groundtruth_{args.output_name}.png",images[...,::-1])
     cv2.imwrite(f"{output_path}/{base}_incompleted_{args.output_name}.png",incompleted_img[...,::-1])
     cv2.imwrite(f"{output_path}/{base}_inpainted_{args.output_name}.png",inpainted_img[...,::-1])
     

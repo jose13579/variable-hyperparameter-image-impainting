@@ -82,7 +82,7 @@ _to_tensors = transforms.Compose([
     ToTorchFormatTensor()])
 
 
-# read frame-wise masks 
+# read images-wise masks 
 def read_mask(mpath):
    m = Image.open(mpath)
    m = m.resize((w, h), Image.NEAREST)
@@ -117,15 +117,15 @@ def main_worker():
    random.seed(set_seed)
    for i in range(total_number):
       startTime = time.time() 
-      frames = Image.open(imgfile[i]).convert('RGB')
-      frames = frames.resize((w, h))
+      images = Image.open(imgfile[i]).convert('RGB')
+      images = images.resize((w, h))
 
       base=os.path.basename(imgfile[i])
       base=os.path.splitext(base)[0]
 
-      feats = _to_tensors(frames).unsqueeze(0)*2-1
+      feats = _to_tensors(images).unsqueeze(0)*2-1
 
-      frames = np.array(frames).astype(np.uint8)
+      images = np.array(images).astype(np.uint8)
 
       rand_mask = random.randint(0, mask_number - 1)
       masks = read_mask(maskfile[rand_mask])
@@ -144,9 +144,9 @@ def main_worker():
          pred_img = pred_img.cpu().permute(0,2,3,1).numpy()*255
 
       inpainted_img = np.array(pred_img[0]).astype(np.uint8)
-      inpainted_img = inpainted_img*(binary_masks)+frames*(1-binary_masks)
+      inpainted_img = inpainted_img*(binary_masks)+images*(1-binary_masks)
  
-      incompleted_img = frames*(1-binary_masks)+255*binary_masks
+      incompleted_img = images*(1-binary_masks)+255*binary_masks
      
       endTime = (time.time() - startTime)
       totalTime += endTime
@@ -154,7 +154,7 @@ def main_worker():
       if print_samples:
          if (i % (total_number // number_samples)) == 0:
             cv2.imwrite(f"{output_path_masks}/{base}.png",binary_masks*255)
-            cv2.imwrite(f"{output_path_groundtruth}/{base}.png",frames[...,::-1])
+            cv2.imwrite(f"{output_path_groundtruth}/{base}.png",images[...,::-1])
             cv2.imwrite(f"{output_path_incompleted}/{base}.png",incompleted_img[...,::-1])
             cv2.imwrite(f"{output_path_inpainted}/{base}.png",inpainted_img[...,::-1])
 
