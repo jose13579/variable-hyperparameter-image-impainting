@@ -12,7 +12,7 @@
         "hole_weight": 1,
         "valid_weight": 1,
         "adversarial_weight": 0.01,
-        "GAN_LOSS": "nsgan",
+        "GAN_LOSS": "lsgan",
         "style_weight":360,
         "perceptual_weight":0.9
     },
