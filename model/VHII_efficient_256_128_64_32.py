@@ -177,7 +177,7 @@ class deconv(nn.Module):
 def conv_1x1_bn(inp, oup):
     return nn.Sequential(
         nn.Conv2d(inp, oup, 1, 1, 0),
-        nn.LeakyReLU(0.2, inplace=True)
+        # nn.LeakyReLU(0.2, inplace=True)
     )
 
 
@@ -318,19 +318,19 @@ class DepthWiseTransformerBlock(nn.Module):
         super().__init__()
         self.hidden = hidden
         self.embed_dims = embed_dims
-        self.conv1 = conv_nxn_bn(hidden, hidden, kernel_size)
+        # self.conv1 = conv_nxn_bn(hidden, hidden, kernel_size)
         self.conv2 = conv_1x1_bn(hidden, embed_dims)
 
         self.transformer = TransformerBlock(patchsize, embed_dims=embed_dims, num_heads=num_heads)
 
         self.conv3 = conv_1x1_bn(embed_dims, hidden)
-        self.conv4 = conv_nxn_bn(hidden, hidden, kernel_size)
+        # self.conv4 = conv_nxn_bn(hidden, hidden, kernel_size)
     
     def forward(self, x):
         x, m = x['x'], x['m']
 
         # Local representations
-        x = self.conv1(x)
+        # x = self.conv1(x)
         x = self.conv2(x)
         
         # Global representations
@@ -338,7 +338,7 @@ class DepthWiseTransformerBlock(nn.Module):
 
         # Fusion
         x = self.conv3(x)
-        x = self.conv4(x)
+        # x = self.conv4(x)
         return {'x': x, 'm': m}
 
 
